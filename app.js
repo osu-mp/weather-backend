@@ -53,5 +53,6 @@ function get_hello(request, response){
 function post_auth(request, response){
     //const user = request.body.user;
     const user = request.user;
+    // return a hardcoded access token
     response.send({"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSm9obiBEb2UiLCJyZWZyZXNoLXRva2VuIjoiZHVtbXlfdmFsdWUxIiwiYWNjZXNzLXRva2VuIjoiZHVtbXlfdmFsdWUyIiwiaWF0IjoxNTE2MjM5MDIyfQ.guTzYRwmwEx2WQbhc-4zFV7dLZw1uWNhUvnzL3fEt3o"})
 }
