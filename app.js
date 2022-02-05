@@ -7,11 +7,12 @@ var app = express()
 
 const url = require('url');             // used to parse query params from url
 
-app.listen(3002)
-console.log('Node.jf Express server is running on port 3002...')
+app.listen(3000)
+console.log('Node.jf Express server is running on port 3000...')
 
 const magic_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSm9obiBEb2UiLCJyZWZyZXNoLXRva2VuIjoiZHVtbXlfdmFsdWUxIiwiYWNjZXNzLXRva2VuIjoiZHVtbXlfdmFsdWUyIiwiaWF0IjoxNTE2MjM5MDIyfQ.guTzYRwmwEx2WQbhc-4zFV7dLZw1uWNhUvnzL3fEt3o";
 
+/*
 app.use(function (req, res, next) {
     // Website you wish to allow to connect
     const allowedOrigins = ['https://editor.swagger.io', 'https://hoppscotch.io'];
@@ -25,7 +26,7 @@ app.use(function (req, res, next) {
         console.log('Allowing origin: ', origin)
     }
 
-    //res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Origin', '*');
 
 
     // Request methods you wish to allow eg: GET, POST, OPTIONS, PUT, PATCH, DELETE
@@ -36,7 +37,7 @@ app.use(function (req, res, next) {
 
     // Pass to next layer of middleware
     next();
-});
+});*/
 
 
 app.get('/v1/weather/', get_weather)
@@ -45,23 +46,30 @@ app.post('/v1/auth/', post_auth)
 
 
 function check_token(req){
+    //console.log("Bypassing token check!! (TODO REMOVE)"); return true;
+
+
     // function to check if user's input token matches the hardcoded token above
     // Return true for authorized users, false otherwise
     const queryObject = url.parse(req.url, true).query;
     //console.log(queryObject);
 
     if (queryObject.token == magic_token)    {
+        console.log("Token accepted")
         return true;
     }
 
+    console.log("Token rejected")
     return false;
 }
 
 function get_weather(req, response){
+    console.log("Weather request: " + req)
     if (check_token(req)){
         response.json({"coord":{"lon":-123.262,"lat":44.5646},"weather":[{"id":804,"main":"Clouds","description":"overcast clouds","icon":"04n"}],"base":"stations","main":{"temp":45.77,"feels_like":43.84,"temp_min":39.9,"temp_max":47.91,"pressure":1026,"humidity":88},"visibility":10000,"wind":{"speed":0,"deg":0},"clouds":{"all":100},"dt":1642217300,"sys":{"type":2,"id":2012991,"country":"US","sunrise":1642175199,"sunset":1642208235},"timezone":-28800,"id":5720727,"name":"Corvallis","cod":200})
     }
     else{
+        throw new Error("Unauthorized request")
         // TODO : should this return a different status code, how?
         response.json({"Error": "Unauthorized user, no weather for you!"})
     }
@@ -74,7 +82,7 @@ function get_hello(req, response){
     console.log('Hello world requested');
 
     if (check_token(req)){
-        response.json({"greeting": "Hello world!"})
+        response.json({"main": {"greeting": "Hello world!"}})
     }
     else{
         // TODO : should this return a different status code, how?
@@ -84,7 +92,8 @@ function get_hello(req, response){
 }
 
 function post_auth(request, response){
+    console.log("Auth requested, returning magic token")
     //const user = request.body.user;
-    const user = request.user;
-    response.send({"token": magic_token})
+    //const user = request.user;
+    response.send({"main": {"token": magic_token}})
 }
