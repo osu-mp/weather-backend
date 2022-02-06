@@ -49,20 +49,12 @@ app.post('/v1/auth/', post_auth)
 
 function check_token(req){
     //console.log("Bypassing token check!! (TODO REMOVE)"); return true;
+    var auth_token = extractToken(req)
 
-
-    // function to check if user's input token matches the hardcoded token above
-    // Return true for authorized users, false otherwise
-    const queryObject = url.parse(req.url, true).query;
-    //console.log(queryObject);
-
-    if (queryObject.token == magic_token)    {
+    if (auth_token == magic_token)    {
         console.log("Token accepted")
         return true;
     }
-
-    console.log("Token: ", queryObject.token)
-
     console.log("Token rejected")
     return false;
 }
@@ -80,8 +72,10 @@ function get_weather(req, response){
 }
 
 function get_hello(req, response){
+    console.log("Get Hello Requested")
     const queryObject = url.parse(req.url, true).query;
     console.log(queryObject);
+
 
     console.log('Hello world requested');
 
@@ -93,6 +87,15 @@ function get_hello(req, response){
         response.json({"greeting": "Unauthorized user, no hello for you!"})
     }
 
+}
+
+function extractToken (req) {
+    if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
+        return req.headers.authorization.split(' ')[1];
+    } else if (req.query && req.query.token) {
+        return req.query.token;
+    }
+    return null;
 }
 
 function post_auth(request, response){
