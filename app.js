@@ -65,8 +65,7 @@ function get_weather(req, response){
         response.json({"coord":{"lon":-123.262,"lat":44.5646},"weather":[{"id":804,"main":"Clouds","description":"overcast clouds","icon":"04n"}],"base":"stations","main":{"temp":45.77,"feels_like":43.84,"temp_min":39.9,"temp_max":47.91,"pressure":1026,"humidity":88},"visibility":10000,"wind":{"speed":0,"deg":0},"clouds":{"all":100},"dt":1642217300,"sys":{"type":2,"id":2012991,"country":"US","sunrise":1642175199,"sunset":1642208235},"timezone":-28800,"id":5720727,"name":"Corvallis","cod":200})
     }
     else{
-        throw new Error("Unauthorized request")
-        // TODO : should this return a different status code, how?
+        response.status(401);
         response.json({"Error": "Unauthorized user, no weather for you!"})
     }
 }
@@ -83,6 +82,7 @@ function get_hello(req, response){
         response.json({"main": {"greeting": "Hello world!"}})
     }
     else{
+        response.status(401);
         // TODO : should this return a different status code, how?
         response.json({"greeting": "Unauthorized user, no hello for you!"})
     }
