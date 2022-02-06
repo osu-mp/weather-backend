@@ -4,6 +4,8 @@ var express = require('express')
 //var bodyParser = require("body-parser");
 
 var app = express()
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 const url = require('url');             // used to parse query params from url
 
@@ -59,6 +61,8 @@ function check_token(req){
         return true;
     }
 
+    console.log("Token: ", queryObject.token)
+
     console.log("Token rejected")
     return false;
 }
@@ -92,8 +96,20 @@ function get_hello(req, response){
 }
 
 function post_auth(request, response){
-    console.log("Auth requested, returning magic token")
-    //const user = request.body.user;
-    //const user = request.user;
-    response.send({"main": {"token": magic_token}})
+    console.log("Auth requested")
+    var user = request.body.username;
+    var pass = request.body.password;
+
+    // set expires for 2 hours from now
+    var exp = new Date();
+    exp.setMinutes(exp.getMinutes() + 120);
+
+    if (user == "joe" && pass == "my_password2"){
+        console.log("User authenticated");
+        response.send({"main": {"token": magic_token, "expires": exp}})
+    }
+    console.log("User rejected");
+
+    throw new Error("Unauthorized request")
+
 }
