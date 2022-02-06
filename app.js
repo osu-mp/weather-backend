@@ -111,8 +111,11 @@ function post_auth(request, response){
         console.log("User authenticated");
         response.send({"main": {"token": magic_token, "expires": exp}})
     }
-    console.log("User rejected");
+    else{
+        console.log("User rejected");
 
-    throw new Error("Unauthorized request")
+        throw new Error("Unauthorized request")
+    }
+
 
 }
