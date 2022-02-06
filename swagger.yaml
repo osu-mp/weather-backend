@@ -1,0 +1,100 @@
+openapi: 3.0.0
+
+components:
+  securitySchemes:
+    bearerAuth: # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT    # optional, arbitrary value for documentation purposes
+security:
+  - bearerAuth: []         # use the same name as above, apply to all paths
+info:
+  description: CS 561 Assignment 4
+  version: 1.0.0
+  title: Assignment 4
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: paceym@oregonstate.edu
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+paths:
+  /v1/weather:
+    get:
+      tags:
+        - weather
+      summary: Mock OpenWeather's GET endpoint
+      description: Return mocked data from OpenWeather
+      operationId: queryWeather
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: string
+                example: matt was here
+        "400":
+          description: Invalid status value
+  /v1/hello:
+    get:
+      tags:
+        - hello
+      summary: Return a greeting
+      description: Query for a greeting
+      operationId: sayHello
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Hello world
+        "400":
+          description: Invalid status value
+  /v1/auth:
+    get:
+      tags:
+        - auth
+      summary: Accept username and password, return mock token
+      description: ""
+      operationId: loginUser
+      parameters:
+        - name: username
+          in: query
+          description: The user name for login
+          required: true
+          schema:
+            type: string
+        - name: password
+          in: query
+          description: The password for login in clear text
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: successful operation
+          headers:
+            X-Rate-Limit:
+              description: calls per hour allowed by the user
+              schema:
+                type: integer
+                format: int32
+            X-Expires-After:
+              description: date in UTC when token expires
+              schema:
+                type: string
+                format: date-time
+          content:
+            application/xml:
+              schema:
+                type: string
+            application/json:
+              schema:
+                type: string
+        "400":
+          description: Invalid username/password supplied
+servers:
+  - url: http://localhost:3002/
