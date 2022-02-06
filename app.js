@@ -1,9 +1,8 @@
 "use strict"
 
 var express = require('express')
-//var bodyParser = require("body-parser");
-
 var app = express()
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -13,34 +12,6 @@ app.listen(3000)
 console.log('Node.jf Express server is running on port 3000...')
 
 const magic_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSm9obiBEb2UiLCJyZWZyZXNoLXRva2VuIjoiZHVtbXlfdmFsdWUxIiwiYWNjZXNzLXRva2VuIjoiZHVtbXlfdmFsdWUyIiwiaWF0IjoxNTE2MjM5MDIyfQ.guTzYRwmwEx2WQbhc-4zFV7dLZw1uWNhUvnzL3fEt3o";
-
-/*
-app.use(function (req, res, next) {
-    // Website you wish to allow to connect
-    const allowedOrigins = ['https://editor.swagger.io', 'https://hoppscotch.io'];
-    const origin = req.headers.origin;
-
-    console.log('Headers: ', req.headers)
-    console.log('In app.use: ', origin);
-
-    if (allowedOrigins.includes(origin)) {
-        res.setHeader('Access-Control-Allow-Origin', origin);
-        console.log('Allowing origin: ', origin)
-    }
-
-    res.setHeader('Access-Control-Allow-Origin', '*');
-
-
-    // Request methods you wish to allow eg: GET, POST, OPTIONS, PUT, PATCH, DELETE
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
-
-    // Request headers you wish to allow
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-
-    // Pass to next layer of middleware
-    next();
-});*/
-
 
 app.get('/v1/weather/', get_weather)
 app.get('/v1/hello/', get_hello)
