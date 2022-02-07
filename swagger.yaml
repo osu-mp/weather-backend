@@ -97,4 +97,4 @@ paths:
         "400":
           description: Invalid username/password supplied
 servers:
-  - url: http://localhost:3002/
+  - url: http://52.55.131.241:3002/
